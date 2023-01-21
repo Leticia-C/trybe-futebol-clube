@@ -43,4 +43,3 @@ Matches.init({
   modelName: 'matches',
   timestamps: false,
 });
-
