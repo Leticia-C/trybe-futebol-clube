@@ -1,5 +1,5 @@
-import { Model, STRING, INTEGER } from "sequelize";
-import db from ".";
+import { Model, STRING, INTEGER } from 'sequelize';
+import db from '.';
 
 class Users extends Model {
   declare id: number;
@@ -36,9 +36,9 @@ Users.init(
   {
     underscored: true,
     sequelize: db,
-    modelName: "users",
+    modelName: 'users',
     timestamps: false,
-  }
+  },
 );
 
 export default Users;
