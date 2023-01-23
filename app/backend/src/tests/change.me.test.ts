@@ -16,10 +16,9 @@ const { expect } = chai;
 describe("Testa Users", () => {
   describe("Testa Login", () => {
     before(async () => {
-      sinon.stub(UsersModel, "findOne").resolves(login as UsersModel);
-      after(() => {
-        UsersModel.restore();
-      });
+       sinon.stub(UsersModel, "findOne")
+      .resolves(login as UsersModel);
+       });
       let chaiHttpResponse: Response;
       it('Testa se a requisisão POST na rota "/login" retorna um token e um status 200 se bem sucedida', async () => {
         await chai
@@ -74,7 +73,7 @@ describe("Testa Users", () => {
             .end((_req, res) => {
               expect(res.status).to.be.equal(401);
               expect(res.body).to.deep.equal({
-                message: "All fields must be filled",
+                message: 'Incorrect email or password',
               });
             });
         });
@@ -86,11 +85,10 @@ describe("Testa Users", () => {
             .end((_req, res) => {
               expect(res.status).to.be.equal(401);
               expect(res.body).to.deep.equal({
-                message: "All fields must be filled",
+                message: 'Incorrect email or password',
               });
             });
         });
       });
     });
   });
-});

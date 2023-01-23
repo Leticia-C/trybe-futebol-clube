@@ -10,13 +10,12 @@ export default async function loginValidation(req: Request, res: Response, next:
     return res.status(400).json({ message: 'All fields must be filled' });
   }
   const user = await loginService.login({ email, password });
-  if (user === null) {
+  if (!user?.email) {
     return res.status(401).json({ message: 'Incorrect email or password' });
   }
   const passwordCrypt = await bcrypt.compare(req.body.password, user.password);
   if (passwordCrypt === false) {
     return res.status(401).json({ message: 'Incorrect email or password' });
   }
-
   next();
 }
