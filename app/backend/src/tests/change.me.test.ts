@@ -40,6 +40,26 @@ describe('Testa Users', () => {
           expect(res.status).to.be.equal(400);
           expect(res.body).to.deep.equal({ message: 'All fields must be filled' });
           });
+          it('Se a senha estiver incorreta, o resultado retornado deverá enviar uma mensagem de erro, com um status http 401:', () => {
+            chai.request(app).post('/login').send({ password: "123456789" })
+            .end((_req, res) => {
+            expect(res.status).to.be.equal(401);
+            expect(res.body).to.deep.equal({ message: 'All fields must be filled' });
+            });
+          });
+          it('Se a senha estiver incorreta, o resultado retornado deverá enviar uma mensagem de erro, com um status http 401:', () => {
+            chai.request(app).post('/login').send({ password: "123456789"})
+            .end((_req, res) => {
+            expect(res.status).to.be.equal(401);
+            expect(res.body).to.deep.equal({ message: 'All fields must be filled' });
+            });
+          });  it('Se o email estiver incorreta, o resultado retornado deverá enviar uma mensagem de erro, com um status http 401:', () => {
+            chai.request(app).post('/login').send({ email: "email_incorreto%gmail.com" })
+            .end((_req, res) => {
+            expect(res.status).to.be.equal(401);
+            expect(res.body).to.deep.equal({ message: 'All fields must be filled' });
+            });
+          });
       });
       });
   });
