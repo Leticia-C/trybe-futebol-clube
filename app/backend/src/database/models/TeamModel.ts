@@ -2,12 +2,12 @@ import { Model, STRING, INTEGER } from 'sequelize';
 import db from '.';
 import Matches from './MatchesModel';
 
-export default class Teams extends Model {
+export default class TeamsModel extends Model {
   declare id: number;
   declare username: string;
 }
 
-Teams.init(
+TeamsModel.init(
   {
     id: {
       type: INTEGER,
@@ -28,8 +28,8 @@ Teams.init(
   },
 );
 
-Teams.belongsTo(Matches, { foreignKey: 'homeTeamId', as: 'home_team_id' });
-Teams.belongsTo(Matches, { foreignKey: 'awayTeamId', as: 'away_team_id' });
+TeamsModel.belongsTo(Matches, { foreignKey: 'homeTeamId', as: 'home_team_id' });
+TeamsModel.belongsTo(Matches, { foreignKey: 'awayTeamId', as: 'away_team_id' });
 
-Matches.hasMany(Teams, { foreignKey: 'id', as: 'home_team_id' });
-Matches.hasMany(Teams, { foreignKey: 'id', as: 'away_team_id' });
+Matches.hasMany(TeamsModel, { foreignKey: 'id', as: 'home_team_id' });
+Matches.hasMany(TeamsModel, { foreignKey: 'id', as: 'away_team_id' });

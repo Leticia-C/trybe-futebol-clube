@@ -1,7 +1,7 @@
 import { Model, STRING, INTEGER } from 'sequelize';
 import db from '.';
 
-export default class Users extends Model {
+export default class UsersModel extends Model {
   declare id: number;
   declare username: string;
   declare role: string;
@@ -9,7 +9,7 @@ export default class Users extends Model {
   declare password: string;
 }
 
-Users.init(
+UsersModel.init(
   {
     id: {
       type: INTEGER,
