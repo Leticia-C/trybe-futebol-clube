@@ -4,6 +4,6 @@ import loginValidation from '../controllers/middleware/loginValidation';
 
 const router = express.Router();
 
-router.post('/', loginController, loginValidation);
+router.post('/', loginValidation, loginController);
 
 export default router;
