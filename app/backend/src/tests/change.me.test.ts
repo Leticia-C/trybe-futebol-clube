@@ -20,7 +20,7 @@ describe("Testa Users", () => {
       .resolves(login as UsersModel);
        });
      // let chaiHttpResponse: Response;
-      it('Testa se a requisisão POST na rota "/login" retorna um token e um status 200 se bem sucedida', async () => {
+      it('Testa se a requisição POST na rota "/login" retorna um token e um status 200 se bem sucedida', async () => {
         const http = await chai
           .request(app)
           .post("/login")
