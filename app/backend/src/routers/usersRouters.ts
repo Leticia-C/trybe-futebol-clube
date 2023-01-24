@@ -1,12 +1,12 @@
 import * as express from 'express';
-import LoginService from '../service/loginService';
+// mport LoginService from '../service/loginService';
 import LoginController from '../controllers/loginController';
 import loginValidation from '../controllers/middleware/loginValidation';
 
 const router = express.Router();
-const loginService = new LoginService();
-const loginRouter = new LoginController(loginService);
 
-router.post('/', loginValidation, loginRouter.doLogin);
+const loginRouter = new LoginController();
+
+router.post('/', loginValidation, (req, res) => loginRouter.doLogin(req, res));
 
 export default router;

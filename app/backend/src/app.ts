@@ -6,7 +6,6 @@ class App {
 
   constructor() {
     this.app = express();
-
     this.config();
     this.routers();
     // Não remover essa rota
