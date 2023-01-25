@@ -10,7 +10,7 @@ export default class LoginController {
   }
 
   async validate(req: Request, res: Response) {
-    const token = req.header('Authorization');
+    const token = req.header('authorization');
     if (token) {
       const decoded = veryfyToken(token as string);
       const { data } = decoded;

@@ -6,7 +6,7 @@ const router = express.Router();
 
 const loginRouter = new LoginController();
 
-router.get('/validate', loginValidation, (req, res) => loginRouter.validate(req, res));
+router.get('/validate', (req, res) => loginRouter.validate(req, res));
 
 router.post('/', loginValidation, (req, res) => loginRouter.doLogin(req, res));
 
