@@ -11,10 +11,12 @@ export default class LoginController {
 
   async validate(req: Request, res: Response) {
     const token = req.header('Authorization');
-    const decoded = veryfyToken(token as string);
-    const { data } = decoded;
-    const user = await this.loginService.getRole(data.id);
-    return res.status(200).json({ role: user });
+    if (token) {
+      const decoded = veryfyToken(token as string);
+      const { data } = decoded;
+      const user = await this.loginService.getRole(data.id);
+      return res.status(200).json({ role: user });
+    }
   }
 
   async doLogin(req: Request, res: Response) {
