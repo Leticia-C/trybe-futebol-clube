@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Request, Response } from 'express';
 import { ILogin } from '../interfaces/IUsers';
 import LoginService from '../service/loginService';
@@ -13,8 +12,8 @@ export default class LoginController {
   async validate(req: Request, res: Response) {
     const token = req.header('Authorization');
     const decoded = veryfyToken(token as string);
-    console.log(decoded);
-    const user = await this.loginService.getRole(1);
+    const { data } = decoded;
+    const user = await this.loginService.getRole(data.id);
     return res.status(200).json({ role: user });
   }
 

@@ -65,5 +65,14 @@ describe("Testa Users", () => {
             expect(http.body).to.deep.equal({message: "All fields must be filled",});
             });
         });
+        before(async () => {
+          sinon.stub(UsersModel, "findByPk")
+         .resolves({role: "admin"} as UsersModel);
+          });
+        it("Testa se a rola /login/validate retorna o role admin:", async () => {
+          const http = await chai.request(app).get("/login/validate")
+             expect(http.status).to.be.equal(200);
+             expect(http.body).to.deep.equal({role: "admin"});
+             });
       });
     });
