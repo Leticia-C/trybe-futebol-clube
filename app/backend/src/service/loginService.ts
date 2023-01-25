@@ -1,3 +1,4 @@
+import * as Bcrypt from 'bcryptjs';
 import IUsers, { ILogin } from '../interfaces/IUsers';
 import UsersModel from '../database/models/UserModel';
 
@@ -10,9 +11,10 @@ export default class LoginService {
     if (user) return user?.role;
   }
 
-  async login({ email } : ILogin): Promise<IUsers | null> {
+  async login({ email, password } : ILogin): Promise<IUsers | null> {
     const user = await this.userModel.findOne({ where: { email } });
-    if (user) {
+    if (user
+       && Bcrypt.compareSync(password as string, user.password)) {
       return {
         id: user.id,
         username: user.username,

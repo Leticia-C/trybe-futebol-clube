@@ -20,8 +20,8 @@ export default class LoginController {
   }
 
   async doLogin(req: Request, res: Response) {
-    const { email } = req.body as ILogin;
-    const user = await this.loginService.login({ email });
+    const { email, password } = req.body as ILogin;
+    const user = await this.loginService.login({ email, password });
     if (user === null) {
       return res.status(401).json({ message: 'Incorrect email or password' });
     }
