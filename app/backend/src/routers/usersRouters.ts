@@ -6,8 +6,8 @@ const router = express.Router();
 
 const loginRouter = new LoginController();
 
-router.post('/', loginValidation, (req, res) => loginRouter.doLogin(req, res));
-
 router.get('/validate', loginValidation, (req, res) => loginRouter.validate(req, res));
+
+router.post('/', loginValidation, (req, res) => loginRouter.doLogin(req, res));
 
 export default router;
