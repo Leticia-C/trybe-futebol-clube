@@ -16,6 +16,6 @@ const createToken = (data: ILogin | IUsers | null) => jwt.sign(
   config as jwt.SignOptions,
 );
 
-export const veryfyToken = (token: string) => jwt.verify(token as string, secret) as jwt.JwtPayload;
+export const veryfyToken = (token: string) => jwt.verify(token, secret) as jwt.JwtPayload;
 
 export default createToken;

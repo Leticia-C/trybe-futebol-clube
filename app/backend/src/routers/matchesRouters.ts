@@ -9,8 +9,10 @@ const matchesRouter = new MatchesController();
 
 router.get('/', (req, res) => matchesRouter.getMatches(req, res));
 
-router.post('/', tokenValidate, (req: Request, res: Response) => {
-  matchesRouter.creareNewMatches(req, res);
-});
+router.post(
+  '/',
+  tokenValidate,
+  (req: Request, res: Response) => matchesRouter.create(req, res),
+);
 
 export default router;

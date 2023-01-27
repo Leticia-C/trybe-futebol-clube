@@ -13,7 +13,7 @@ export default class TeamController {
     return res.status(200).json(matches);
   }
 
-  async creareNewMatches(req: Request, res: Response) {
+  async create(req: Request, res: Response) {
     const { body } = req;
     const matches = await this.matchesService.postNewMach(body);
     return res.status(201).json(matches);
