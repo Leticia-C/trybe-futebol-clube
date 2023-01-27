@@ -8,15 +8,17 @@ export default class MatcheService {
   ) {
   }
 
-  public static async awayTeamNameById(id: number) {
-    const awayTeam = await TeamsModel.findByPk(id);
-    return awayTeam?.teamName;
+  public async postNewMach(newMatch: IMatches): Promise<IMatches | undefined> {
+    const matches = await this.matchesModel.create({
+      ...newMatch,
+      inProgress: true,
+    });
+    return matches as IMatches;
   }
 
-  public static async homeTeamNameById(id: number) {
-    const homeTeam = await TeamsModel.findByPk(id);
-    return homeTeam?.teamName;
-  }
+  /*  public async finishMachById(id: number): Promise<void > {
+    const matches = await this.matchesModel.update({});
+  } */
 
   public async getAll(progress : string | undefined): Promise< IMatches[]> {
     const matches = await this.matchesModel.findAll({
