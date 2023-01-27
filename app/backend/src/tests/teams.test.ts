@@ -8,7 +8,6 @@ import { app } from "../app";
 
 import { Response } from "superagent";
 import { allTeams, teamById } from "./mocks/team";
-import ITeam from "../interfaces/ITeam";
 
 chai.use(chaiHttp);
 
