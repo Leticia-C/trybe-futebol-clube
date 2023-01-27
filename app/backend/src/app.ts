@@ -1,6 +1,7 @@
 import * as express from 'express';
 import teamRouter from './routers/teamsRoters';
 import loginRouter from './routers/usersRouters';
+import matchesRouter from './routers/matchesRouters';
 
 class App {
   public app: express.Express;
@@ -8,7 +9,9 @@ class App {
   constructor() {
     this.app = express();
     this.config();
-    this.routers();
+    this.loginRouters();
+    this.teamRouters();
+    this.matchesRouters();
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
   }
@@ -29,9 +32,16 @@ class App {
     this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
   }
 
-  private routers():void {
+  private loginRouters():void {
     this.app.use('/login', loginRouter);
+  }
+
+  private teamRouters():void {
     this.app.use('/teams', teamRouter);
+  }
+
+  private matchesRouters():void {
+    this.app.use('/matches', matchesRouter);
   }
 }
 
