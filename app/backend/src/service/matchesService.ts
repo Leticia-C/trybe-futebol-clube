@@ -16,10 +16,6 @@ export default class MatcheService {
     return matches as IMatches;
   }
 
-  /*  public async finishMachById(id: number): Promise<void > {
-    const matches = await this.matchesModel.update({});
-  } */
-
   public async getAll(progress : string | undefined): Promise< IMatches[]> {
     const matches = await this.matchesModel.findAll({
       include: ([
