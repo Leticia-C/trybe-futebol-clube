@@ -10,9 +10,9 @@ export default class LoginController {
   }
 
   async validate(req: Request, res: Response) {
-    const token = req.header('authorization');
-    if (token) {
-      const decoded = veryfyToken(token as string);
+    const { authorization } = req.headers;
+    if (authorization) {
+      const decoded = veryfyToken(authorization as string);
       const { data } = decoded;
       const user = await this.loginService.getRole(data.id);
       return res.status(200).json({ role: user });
