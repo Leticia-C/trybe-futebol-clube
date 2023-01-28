@@ -18,4 +18,17 @@ export default class TeamController {
     const matches = await this.matchesService.postNewMach(body);
     return res.status(201).json(matches);
   }
+
+  async updateToFinish(req: Request, res: Response) {
+    const { id } = req.params;
+    await this.matchesService.changeMaches(Number(id));
+    return res.status(200).json({ message: 'Finished' });
+  }
+
+  async updateGols(req: Request, res: Response) {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    await this.matchesService.changeGols({ homeTeamGoals, awayTeamGoals }, Number(id));
+    return res.status(200).json({ message: 'Finished' });
+  }
 }

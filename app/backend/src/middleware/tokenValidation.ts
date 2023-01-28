@@ -8,7 +8,7 @@ export default function loginValidation(req: Request, _res: Response, next: Next
   try {
     veryfyToken(token as string);
   } catch (error) {
-    throw new HttpException(401, 'Invalid User!');
+    throw new HttpException(401, 'Token must be a valid token');
   }
   next();
 }
