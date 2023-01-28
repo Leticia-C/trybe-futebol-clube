@@ -44,7 +44,6 @@ class App {
     this.app.use('/matches', matchesRouter);
   }
 }
-
 export { App };
 
 // Essa segunda exportação é estratégica, e a execução dos testes de cobertura depende dela

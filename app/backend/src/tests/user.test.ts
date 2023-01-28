@@ -1,3 +1,4 @@
+import { veryfyToken } from './../utils/auth';
 import { login } from "./mocks/users";
 import * as sinon from "sinon";
 import * as chai from "chai";
@@ -21,11 +22,8 @@ describe("Testa Users", () => {
        });
      // let chaiHttpResponse: Response;
       it('Testa se a requisição POST na rota "/login" retorna um token e um status 200 se bem sucedida', async () => {
-        const http = await chai
-          .request(app)
-          .post("/login")
-          .send(login)
-
+        const http = await chai.request(app).post('/login')
+        .set('Authorization', 'veryfyToken')
             expect(http.status).to.be.equal(200);
             expect(http.body).to.have.ownProperty("token");
       });
