@@ -1,4 +1,6 @@
 import * as express from 'express';
+import 'express-async-errors';
+import ErrorMiddleware from './middleware/ErrorMiddleware';
 import teamRouter from './routers/teamsRoters';
 import loginRouter from './routers/usersRouters';
 import matchesRouter from './routers/matchesRouters';
@@ -9,9 +11,8 @@ class App {
   constructor() {
     this.app = express();
     this.config();
-    this.loginRouters();
-    this.teamRouters();
-    this.matchesRouters();
+    this.routers();
+    this.errors();
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
   }
@@ -32,16 +33,14 @@ class App {
     this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
   }
 
-  private loginRouters():void {
+  private routers():void {
     this.app.use('/login', loginRouter);
-  }
-
-  private teamRouters():void {
     this.app.use('/teams', teamRouter);
+    this.app.use('/matches', matchesRouter);
   }
 
-  private matchesRouters():void {
-    this.app.use('/matches', matchesRouter);
+  private errors(): void {
+    this.app.use(ErrorMiddleware);
   }
 }
 export { App };

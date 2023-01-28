@@ -10,21 +10,16 @@ export default class LoginController {
   }
 
   async validate(req: Request, res: Response) {
-    const { authorization } = req.headers;
-    if (authorization) {
-      const decoded = veryfyToken(authorization as string);
-      const { data } = decoded;
-      const user = await this.loginService.getRole(data.id);
-      return res.status(200).json({ role: user });
-    }
+    const { authorization } = req.headers || '';
+    const decoded = veryfyToken(authorization as string);
+    const { data } = decoded;
+    const user = await this.loginService.getRole(data.id);
+    return res.status(200).json({ role: user });
   }
 
   async doLogin(req: Request, res: Response) {
     const { email, password } = req.body as ILogin;
     const user = await this.loginService.login({ email, password });
-    if (user === null) {
-      return res.status(401).json({ message: 'Incorrect email or password' });
-    }
     const token = createToken(user);
     return res.status(200).json({ token });
   }

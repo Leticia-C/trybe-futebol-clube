@@ -1,6 +1,7 @@
 import * as Bcrypt from 'bcryptjs';
 import IUsers, { ILogin } from '../interfaces/IUsers';
 import UsersModel from '../database/models/UserModel';
+import HttpException from '../utils/HttpException';
 
 export default class LoginService {
   constructor(private userModel = UsersModel) {
@@ -11,8 +12,14 @@ export default class LoginService {
     if (user) return user?.role;
   }
 
-  async login({ email, password } : ILogin): Promise<IUsers | null> {
+  async login({ email, password } : ILogin): Promise<IUsers | undefined> {
     const user = await this.userModel.findOne({ where: { email } });
+    if (!email || !password) {
+      throw new HttpException(400, 'All fields must be filled');
+    }
+    if (!user) {
+      throw new HttpException(401, 'Incorrect email or password');
+    }
     if (user
        && Bcrypt.compareSync(password as string, user.password)) {
       return {
@@ -20,6 +27,6 @@ export default class LoginService {
         username: user.username,
       } as IUsers;
     }
-    return null;
+    throw new HttpException(401, 'Incorrect email or password');
   }
 }

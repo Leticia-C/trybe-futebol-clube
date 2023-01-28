@@ -19,6 +19,8 @@ describe("Testa Teams", () => {
        sinon.stub(TeamModel, "findAll")
       .resolves(allTeams as TeamModel[]);
        });
+       after(()=>{
+        (TeamModel.findAll as sinon.SinonStub).restore();})
      // let chaiHttpResponse: Response;
       it('Testa se a requisição GET na rota "/teams" retorna todos os times de futebol', async () => {
         const http = await chai.request(app).get("/teams")

@@ -1,4 +1,4 @@
-/* import { allMatches } from './mocks/matches';
+import { allMatches } from './mocks/matches';
 import * as sinon from "sinon";
 import * as chai from "chai";
 import MatchesModel from "../database/models/MatchesModel";
@@ -19,6 +19,8 @@ describe("Testa Matches", () => {
        return sinon.stub(MatchesModel, "findAll")
             .resolves();
        });
+       after(()=>{
+       (MatchesModel.findAll as sinon.SinonStub).restore();})
      // let chaiHttpResponse: Response;
       it('Testa se a requisição GET na rota "/matches" retorna todos os times de futebol', async () => {
         const http = await chai
@@ -29,15 +31,5 @@ describe("Testa Matches", () => {
             expect(http.status).to.be.equal(200);
             expect(http.body).to.be.deep.equal(allMatches);
       });
-  /*     it('Testa se a requisição GET na rota "/teams/id" retornao time com aquele id', async () => {
-        const http = await chai
-        .request(app)
-        .get("/teams/7")
-          .send({ email: "user@user.com" })
-
-            expect(http.status).to.be.equal(200);
-            expect(http.body).to.deep.equal(teamById);
-      });
-    });
 });
- */
+});
