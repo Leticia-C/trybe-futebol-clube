@@ -9,27 +9,44 @@ import { app } from "../app";
 
 import { Response } from "superagent";
 import IMatches from '../interfaces/IMatches';
+import { afterEach } from 'mocha';
+import { inProgress } from './mocks/matchesinProgress';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 describe("Testa Matches", () => {
   describe("Testa toda rota de Matches", () => {
-    before(async () => {
-       return sinon.stub(MatchesModel, "findAll")
-            .resolves();
-       });
-       after(()=>{
-       (MatchesModel.findAll as sinon.SinonStub).restore();})
-     // let chaiHttpResponse: Response;
-      it('Testa se a requisição GET na rota "/matches" retorna todos os times de futebol', async () => {
-        const http = await chai
-          .request(app)
-          .get("/matches")
-          .send(allMatches)
+    afterEach(() => {
+      sinon.restore();
+    })
+    // let chaiHttpResponse: Response;
+    it('Testa se a requisição GET na rota "/matches" retorna todos os times de futebol', async () => {
+      const http = await chai
+        .request(app)
+        .get("/matches")
+        .send()
 
-            expect(http.status).to.be.equal(200);
-            expect(http.body).to.be.deep.equal(allMatches);
-      });
-});
+      expect(http.status).to.be.equal(200);
+      expect(http.body).to.be.deep.equal(allMatches);
+    });
+    it('Testa se a requisição GET na rota "/matches" de forma que seja possível filtrar as partidas em andamento ', async () => {
+      const http = await chai
+        .request(app)
+        .get("/matches").query('inProgress=true')
+        .send()
+
+      expect(http.status).to.be.equal(200);
+      expect(http.body).to.be.deep.equal(inProgress);
+    });
+    it('Testa se a requisição GET na rota "/matches" de forma que seja possível filtrar as partidas finalizadas ', async () => {
+      const http = await chai
+        .request(app)
+        .get("/matches").query('inProgress=false')
+        .send()
+
+      expect(http.status).to.be.equal(200);
+      expect(http.body).to.be.deep.equal(inProgress);
+    });
+  });
 });

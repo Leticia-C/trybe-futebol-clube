@@ -8,3 +8,6 @@ export default interface IUsers extends ILogin {
   username: string;
   role?: string;
 }
+export interface IToken {
+  token: string,
+}
