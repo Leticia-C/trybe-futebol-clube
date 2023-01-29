@@ -7,15 +7,15 @@ export default class MatcheService {
   constructor(
     private matchesModel = MatchesModel,
     public readonly mensageNotFound = 'There is no team with such id!',
-    public readonly equalId = 'It is not possible to create a match with two equal teams',
   ) { }
 
   public async postNewMach(newMatch: IMatches): Promise<IMatches | undefined> {
-    const matches = await this.matchesModel
-      .create({ ...newMatch, inProgress: true });
-    const { awayTeamId, homeTeamId } = matches;
-    if (awayTeamId === homeTeamId) throw new HttpException(422, this.equalId);
-    return matches as IMatches;
+    try {
+      const matches = await this.matchesModel.create({ ...newMatch, inProgress: true });
+      return matches as IMatches;
+    } catch (err) {
+      throw new HttpException(404, this.mensageNotFound);
+    }
   }
 
   public async getAll(progress : string | undefined): Promise< IMatches[]> {
