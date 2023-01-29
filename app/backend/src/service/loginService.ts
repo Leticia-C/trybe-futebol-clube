@@ -14,11 +14,7 @@ export default class LoginService {
 
   async login({ email, password } : ILogin): Promise<IUsers | undefined> {
     const user = await this.userModel.findOne({ where: { email } });
-    console.log(email, password);
-    if (!email && !password) {
-      throw new HttpException(400, 'All fields must be filled');
-    }
-    if (!user) {
+    if (user === null) {
       throw new HttpException(401, 'Incorrect email or password');
     }
     if (user
