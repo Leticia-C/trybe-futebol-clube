@@ -38,6 +38,17 @@ export default class LeaderbordService {
   public async classification():Promise<IClassification[]> {
     const withoutDuplicate = await this.getDuplicate();
     const classificate = withoutDuplicate.sort((a, b) => b.totalPoints - a.totalPoints);
+    classificate.sort((a, b) => (b.totalPoints === a.totalPoints
+      ? b.totalVictories - a.totalVictories : b.totalPoints - a.totalPoints
+    ));
+    classificate.sort((a, b) => (b.totalPoints === a.totalPoints
+       && b.totalVictories === a.totalVictories ? b.goalsFavor - a.goalsFavor
+      : b.totalPoints - a.totalPoints
+    ));
+    classificate.sort((a, b) => (b.totalPoints === a.totalPoints
+      && b.totalVictories === a.totalVictories && b.goalsFavor === a.goalsBalance
+      ? a.totalLosses - b.totalLosses : b.totalPoints - a.totalPoints
+    ));
     return classificate;
   }
 
