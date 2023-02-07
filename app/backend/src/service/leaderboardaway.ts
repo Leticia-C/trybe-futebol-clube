@@ -3,7 +3,7 @@ import IClassification, { ITotalPointsAndResults, ITeams,
 import MatchesModel from '../database/models/MatchesModel';
 import TeamsModel from '../database/models/TeamModel';
 
-export default class LeaderbordService {
+export default class LeaderbordAwayService {
   constructor(
     private teamsModel = TeamsModel,
     private matchesModel = MatchesModel,
@@ -33,16 +33,16 @@ export default class LeaderbordService {
       ? b.totalVictories - a.totalVictories : b.totalPoints - a.totalPoints
     ));
     classificate.sort((a, b) => (b.totalPoints === a.totalPoints
-       && b.totalVictories === a.totalVictories ? b.goalsBalance - a.goalsBalance
+         && b.totalVictories === a.totalVictories ? b.goalsBalance - a.goalsBalance
       : b.totalPoints - a.totalPoints
     ));
     classificate.sort((a, b) => (b.totalPoints === a.totalPoints
-      && b.totalVictories === a.totalVictories && b.goalsBalance === a.goalsBalance
+        && b.totalVictories === a.totalVictories && b.goalsBalance === a.goalsBalance
       ? b.goalsFavor - a.goalsFavor : b.totalPoints - a.totalPoints
     ));
     classificate.sort((a, b) => (b.totalPoints === a.totalPoints
-      && b.totalVictories === a.totalVictories && b.goalsBalance === a.goalsBalance
-      && b.goalsFavor === a.goalsFavor ? a.goalsOwn - b.goalsOwn : b.totalPoints - a.totalPoints
+        && b.totalVictories === a.totalVictories && b.goalsBalance === a.goalsBalance
+        && b.goalsFavor === a.goalsFavor ? a.goalsOwn - b.goalsOwn : b.totalPoints - a.totalPoints
     ));
     return classificate;
   }
@@ -73,12 +73,12 @@ export default class LeaderbordService {
     let { totalPoints = 0, totalVictories = 0,
       totalDraws = 0, totalLosses = 0, efficiency = 0, totalGames = 0 } = object;
     const teams = await this.allTeams();
-    teams.forEach(({ awayTeamGoals, homeTeamGoals, homeTeamId }, _i, arr) => {
-      if (homeTeamId === id) {
-        if (awayTeamGoals < homeTeamGoals) { totalPoints += 3; totalVictories += 1; }
+    teams.forEach(({ awayTeamGoals, homeTeamGoals, awayTeamId }, _i, arr) => {
+      if (awayTeamId === id) {
+        if (awayTeamGoals > homeTeamGoals) { totalPoints += 3; totalVictories += 1; }
         if (awayTeamGoals === homeTeamGoals) { totalPoints += 1; totalDraws += 1; }
-        if (awayTeamGoals > homeTeamGoals) { totalPoints += 0; totalLosses += 1; }
-        totalGames = arr.filter((value) => value.homeTeamId === id).length;
+        if (awayTeamGoals < homeTeamGoals) { totalPoints += 0; totalLosses += 1; }
+        totalGames = arr.filter((value) => value.awayTeamId === id).length;
       }
     });
     const efficiencyCount = ((totalPoints / (totalGames * 3)) * 100).toFixed(2);
@@ -93,10 +93,10 @@ export default class LeaderbordService {
     const object = {} as IGolResults;
     let { goalsFavor = 0, goalsOwn = 0,
       goalsBalance = 0 } = object;
-    teams.forEach(({ awayTeamGoals, homeTeamGoals, homeTeamId }) => {
-      if (homeTeamId === id) {
-        goalsFavor += homeTeamGoals;
-        goalsOwn += awayTeamGoals;
+    teams.forEach(({ awayTeamGoals, homeTeamGoals, awayTeamId }) => {
+      if (awayTeamId === id) {
+        goalsFavor += awayTeamGoals;
+        goalsOwn += homeTeamGoals;
         goalsBalance = goalsFavor - goalsOwn;
       }
     });

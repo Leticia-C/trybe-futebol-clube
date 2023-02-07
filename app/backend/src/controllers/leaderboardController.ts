@@ -1,14 +1,22 @@
 import { Request, Response } from 'express';
-import LeaderbordService from '../service/leaderbordServece';
+import LeaderbordAwayService from '../service/leaderboardaway';
+import LeaderboardHomeService from '../service/leaderbordHomeServece';
 
 export default class LeaderbordController {
-  public leaderboardService: LeaderbordService;
+  public leaderboardHomeService: LeaderboardHomeService ;
+  public leaderboardAwayService : LeaderbordAwayService;
   constructor() {
-    this.leaderboardService = new LeaderbordService();
+    this.leaderboardHomeService = new LeaderboardHomeService();
+    this.leaderboardAwayService = new LeaderbordAwayService();
   }
 
-  async getHomeMatches(_req: Request, res: Response) {
-    const teams = await this.leaderboardService.classification();
+  async getHomeTeamsMatches(_req: Request, res: Response) {
+    const teams = await this.leaderboardHomeService.classification();
+    return res.status(200).json(teams);
+  }
+
+  async getAwayTeamsMatches(_req: Request, res: Response) {
+    const teams = await this.leaderboardAwayService.classification();
     return res.status(200).json(teams);
   }
 }
