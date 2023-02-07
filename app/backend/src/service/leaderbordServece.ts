@@ -1,12 +1,14 @@
 import IClassification, { ITotalPointsAndResults, ITeams,
   IGolResults } from '../interfaces/IClassification';
-import TeamsModel from '../database/models/TeamModel';
 import MatchesModel from '../database/models/MatchesModel';
+import TeamsModel from '../database/models/TeamModel';
 
 export default class LeaderbordService {
   constructor(
+    private teamsModel = TeamsModel,
     private matchesModel = MatchesModel,
-  ) { }
+  ) {
+  }
 
   public async allTeams(): Promise<ITeams[] > {
     const teams = await this.matchesModel.findAll({
@@ -24,38 +26,31 @@ export default class LeaderbordService {
     return teams;
   }
 
-  public async getDuplicate():Promise<IClassification[]> {
-    const set = new Set();
-    const allTeams = await this.getAllInfo();
-    const classificate = allTeams.filter((name) => {
-      const duplicated = set.has(name.name);
-      set.add(name.name);
-      return !duplicated;
-    });
-    return classificate;
-  }
-
   public async classification():Promise<IClassification[]> {
-    const withoutDuplicate = await this.getDuplicate();
-    const classificate = withoutDuplicate.sort((a, b) => b.totalPoints - a.totalPoints);
+    const classificate = await this.getAllInfo();
+    classificate.sort((a, b) => b.totalPoints - a.totalPoints);
     classificate.sort((a, b) => (b.totalPoints === a.totalPoints
       ? b.totalVictories - a.totalVictories : b.totalPoints - a.totalPoints
     ));
     classificate.sort((a, b) => (b.totalPoints === a.totalPoints
-       && b.totalVictories === a.totalVictories ? b.goalsFavor - a.goalsFavor
+       && b.totalVictories === a.totalVictories ? b.goalsBalance - a.goalsBalance
       : b.totalPoints - a.totalPoints
     ));
     classificate.sort((a, b) => (b.totalPoints === a.totalPoints
-      && b.totalVictories === a.totalVictories && b.goalsFavor === a.goalsBalance
-      ? a.totalLosses - b.totalLosses : b.totalPoints - a.totalPoints
+      && b.totalVictories === a.totalVictories && b.goalsBalance === a.goalsBalance
+      ? b.goalsFavor - a.goalsFavor : b.totalPoints - a.totalPoints
+    ));
+    classificate.sort((a, b) => (b.totalPoints === a.totalPoints
+      && b.totalVictories === a.totalVictories && b.goalsBalance === a.goalsBalance
+      && b.goalsFavor === a.goalsFavor ? a.goalsOwn - b.goalsOwn : b.totalPoints - a.totalPoints
     ));
     return classificate;
   }
 
   public async getAllInfo(): Promise<IClassification[]> {
-    const teams = await this.allTeams();
+    const teams = await this.teamsModel.findAll();
     const homeTeamLeaderBord: IClassification[] = [];
-    await Promise.all(teams.map(async ({ homeTeam: { teamName, id } }) => {
+    await Promise.all(teams.map(async ({ teamName, id }) => {
       const { totalPoints, totalVictories,
         totalDraws, totalLosses, efficiency, totalGames } = await this.getTotalPointsAndResuts(id);
       const { goalsBalance, goalsFavor, goalsOwn } = await this.getGols(id);
@@ -82,12 +77,12 @@ export default class LeaderbordService {
       if (homeTeamId === id) {
         if (awayTeamGoals < homeTeamGoals) { totalPoints += 3; totalVictories += 1; }
         if (awayTeamGoals === homeTeamGoals) { totalPoints += 1; totalDraws += 1; }
-        if (awayTeamGoals > homeTeamGoals) { totalLosses += 1; }
+        if (awayTeamGoals > homeTeamGoals) { totalPoints += 0; totalLosses += 1; }
         totalGames = arr.filter((value) => value.homeTeamId === id).length;
       }
     });
-    const efficiencyCount = ((totalPoints / (totalGames * 3)) * 100);
-    efficiency = Number(efficiencyCount.toFixed(2));
+    const efficiencyCount = ((totalPoints / (totalGames * 3)) * 100).toFixed(2);
+    efficiency = Number(efficiencyCount);
     return {
       totalPoints, totalVictories, totalDraws, totalLosses, totalGames, efficiency,
     };
