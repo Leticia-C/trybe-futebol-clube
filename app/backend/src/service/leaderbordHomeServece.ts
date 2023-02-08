@@ -51,40 +51,36 @@ export default class LeaderboardHomeService {
     const teams = await this.teamsModel.findAll();
     const homeTeamLeaderBord: IClassification[] = [];
     await Promise.all(teams.map(async ({ teamName, id }) => {
-      const { totalPoints, totalVictories,
-        totalDraws, totalLosses, efficiency, totalGames } = await this.getTotalPointsAndResuts(id);
+      const { totalPoints, totalVictories, totalDraws } = await this.getAllPoints(id);
+      const totalGames = await this.getAllGames(id);
       const { goalsBalance, goalsFavor, goalsOwn } = await this.getGols(id);
       homeTeamLeaderBord.push({ name: teamName,
         totalPoints,
         totalGames,
         totalVictories,
         totalDraws,
-        totalLosses,
+        totalLosses: (totalGames - (totalVictories + totalDraws)),
         goalsFavor,
         goalsOwn,
         goalsBalance,
-        efficiency });
+        efficiency: Number(((totalPoints / (totalGames * 3)) * 100).toFixed(2)) });
     }));
     return homeTeamLeaderBord;
   }
 
-  public async getTotalPointsAndResuts(id: number): Promise<ITotalPointsAndResults> {
+  public async getAllPoints(id: number): Promise<ITotalPointsAndResults> {
     const object = {} as ITotalPointsAndResults;
     let { totalPoints = 0, totalVictories = 0,
-      totalDraws = 0, totalLosses = 0, efficiency = 0, totalGames = 0 } = object;
+      totalDraws = 0 } = object;
     const teams = await this.allTeams();
-    teams.forEach(({ awayTeamGoals, homeTeamGoals, homeTeamId }, _i, arr) => {
+    teams.forEach(({ awayTeamGoals, homeTeamGoals, homeTeamId }) => {
       if (homeTeamId === id) {
         if (awayTeamGoals < homeTeamGoals) { totalPoints += 3; totalVictories += 1; }
         if (awayTeamGoals === homeTeamGoals) { totalPoints += 1; totalDraws += 1; }
-        if (awayTeamGoals > homeTeamGoals) { totalPoints += 0; totalLosses += 1; }
-        totalGames = arr.filter((value) => value.homeTeamId === id).length;
       }
     });
-    const efficiencyCount = ((totalPoints / (totalGames * 3)) * 100).toFixed(2);
-    efficiency = Number(efficiencyCount);
     return {
-      totalPoints, totalVictories, totalDraws, totalLosses, totalGames, efficiency,
+      totalPoints, totalVictories, totalDraws,
     };
   }
 
@@ -101,5 +97,17 @@ export default class LeaderboardHomeService {
       }
     });
     return { goalsFavor, goalsOwn, goalsBalance };
+  }
+
+  public async getAllGames(id: number):Promise<number> {
+    let totalGames = 0;
+    const teams = await this.allTeams();
+    teams.forEach((games, _i, arr) => {
+      if (id === games.homeTeamId) {
+        totalGames = arr
+          .filter((value) => value.homeTeamId === id).length;
+      }
+    });
+    return totalGames;
   }
 }

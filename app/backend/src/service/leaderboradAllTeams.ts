@@ -1,9 +1,9 @@
-import IClassification, { ITotalPointsAndResults, ITeams,
-  IGolResults } from '../interfaces/IClassification';
+import IClassification, { ITotalPointsAndResults, IGolResults, ITeams }
+  from '../interfaces/IClassification';
 import MatchesModel from '../database/models/MatchesModel';
 import TeamsModel from '../database/models/TeamModel';
 
-export default class LeaderbordAwayService {
+export default class LeaderbordAllTeamsService {
   constructor(
     private teamsModel = TeamsModel,
     private matchesModel = MatchesModel,
@@ -73,9 +73,13 @@ export default class LeaderbordAwayService {
     let { totalPoints = 0, totalVictories = 0,
       totalDraws = 0 } = object;
     const teams = await this.allTeams();
-    teams.forEach(({ awayTeamGoals, homeTeamGoals, awayTeamId }) => {
+    teams.forEach(async ({ awayTeamGoals, homeTeamGoals, awayTeamId, homeTeamId }) => {
       if (awayTeamId === id) {
         if (awayTeamGoals > homeTeamGoals) { totalPoints += 3; totalVictories += 1; }
+        if (awayTeamGoals === homeTeamGoals) { totalPoints += 1; totalDraws += 1; }
+      }
+      if (homeTeamId === id) {
+        if (awayTeamGoals < homeTeamGoals) { totalPoints += 3; totalVictories += 1; }
         if (awayTeamGoals === homeTeamGoals) { totalPoints += 1; totalDraws += 1; }
       }
     });
@@ -87,10 +91,15 @@ export default class LeaderbordAwayService {
     const object = {} as IGolResults;
     let { goalsFavor = 0, goalsOwn = 0,
       goalsBalance = 0 } = object;
-    teams.forEach(({ awayTeamGoals, homeTeamGoals, awayTeamId }) => {
+    teams.forEach(({ awayTeamGoals, homeTeamGoals, awayTeamId, homeTeamId }) => {
       if (awayTeamId === id) {
         goalsFavor += awayTeamGoals;
         goalsOwn += homeTeamGoals;
+        goalsBalance = goalsFavor - goalsOwn;
+      }
+      if (homeTeamId === id) {
+        goalsFavor += homeTeamGoals;
+        goalsOwn += awayTeamGoals;
         goalsBalance = goalsFavor - goalsOwn;
       }
     });
@@ -100,12 +109,8 @@ export default class LeaderbordAwayService {
   public async getAllGames(id: number):Promise<number> {
     let totalGames = 0;
     const teams = await this.allTeams();
-    teams.forEach((games, _i, arr) => {
-      if (id === games.awayTeamId) {
-        totalGames = arr
-          .filter((value) => value.awayTeamId === id).length;
-      }
-    });
+    totalGames = teams
+      .filter((games) => id === games.homeTeamId || id === games.awayTeamId).length;
     return totalGames;
   }
 }

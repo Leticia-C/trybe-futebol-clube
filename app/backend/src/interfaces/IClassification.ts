@@ -27,16 +27,18 @@ export interface ITeams {
 }
 
 export interface ITotalPointsAndResults {
-  totalGames: number,
   totalPoints: number,
   totalVictories: number,
   totalDraws: number,
-  totalLosses: number,
-  efficiency: number,
 }
 
 export interface IGolResults {
   goalsFavor: number,
   goalsOwn: number,
   goalsBalance: number,
+}
+
+export interface ITotalsGamesAndPath {
+  totalGames: number,
+  path: string,
 }
