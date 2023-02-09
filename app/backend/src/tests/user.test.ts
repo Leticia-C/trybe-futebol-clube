@@ -17,9 +17,7 @@ const { expect } = chai;
 
 // let http: Response;
 describe("Testa Login", () => {
-  afterEach(()=>{
-    sinon.restore();
-  })
+  afterEach(sinon.restore);
   it('Testa se a requisição POST na rota "/login" retorna um token e um status 200 se bem sucedida', async () => {
     const http = await chai.request(app).post('/login').send({
       email: 'user@user.com',
