@@ -3,7 +3,7 @@ import IClassification, { ITotalPointsAndResults, IGolResults, ITeams }
 import MatchesModel from '../database/models/MatchesModel';
 import TeamsModel from '../database/models/TeamModel';
 
-export default class LeaderbordAllTeamsService {
+export default class LeaderbordService {
   constructor(
     private teamsModel = TeamsModel,
     private matchesModel = MatchesModel,
@@ -40,9 +40,8 @@ export default class LeaderbordAllTeamsService {
   public async classification(path: string):Promise<IClassification[]> {
     const classificate = await this.filterTeams(path);
     classificate.sort((a, b) => b.totalPoints - a.totalPoints
-    || b.totalVictories - a.totalVictories || b.totalPoints - a.totalPoints
-    || b.goalsBalance - a.goalsBalance || b.goalsFavor - a.goalsFavor
-    || a.goalsOwn - b.goalsOwn);
+    || b.totalVictories - a.totalVictories || b.goalsBalance - a.goalsBalance
+    || b.goalsFavor - a.goalsFavor || a.goalsOwn - b.goalsOwn);
     return classificate;
   }
 
