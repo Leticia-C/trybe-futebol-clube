@@ -28,11 +28,9 @@ describe("Testa Teams", () => {
             expect(http.status).to.be.equal(200);
             expect(http.body).to.be.deep.equal(allTeams);
       });
-      before(async () => {
-        sinon.stub(TeamModel, "findByPk")
-       .resolves(teamById as TeamModel);
-        });
       it('Testa se a requisição GET na rota "/teams/id" retornao time com aquele id', async () => {
+       sinon.stub(TeamModel, "findByPk")
+       .resolves(teamById as TeamModel);
         const http = await chai.request(app).get("/teams/7")
 
             expect(http.status).to.be.equal(200);
