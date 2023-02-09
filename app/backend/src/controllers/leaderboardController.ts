@@ -13,18 +13,18 @@ export default class LeaderbordController {
     this.leaderbordAllTeamsService = new LeaderbordAllTeamsService();
   }
 
-  async getHomeTeamsMatches(_req: Request, res: Response) {
-    const teams = await this.leaderboardHomeService.classification();
+  async getHomeTeamsMatches(req: Request, res: Response) {
+    const teams = await this.leaderbordAllTeamsService.classification('home');
     return res.status(200).json(teams);
   }
 
   async getAwayTeamsMatches(_req: Request, res: Response) {
-    const teams = await this.leaderboardAwayService.classification();
+    const teams = await this.leaderbordAllTeamsService.classification('away');
     return res.status(200).json(teams);
   }
 
   async getAllTeamsMatches(_req: Request, res: Response) {
-    const teams = await this.leaderbordAllTeamsService.classification();
+    const teams = await this.leaderbordAllTeamsService.classification('');
     return res.status(200).json(teams);
   }
 }

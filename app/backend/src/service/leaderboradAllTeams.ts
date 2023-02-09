@@ -26,24 +26,23 @@ export default class LeaderbordAllTeamsService {
     return teams;
   }
 
-  public async classification():Promise<IClassification[]> {
-    const classificate = await this.getAllInfo();
-    classificate.sort((a, b) => b.totalPoints - a.totalPoints);
-    classificate.sort((a, b) => (b.totalPoints === a.totalPoints
-      ? b.totalVictories - a.totalVictories : b.totalPoints - a.totalPoints
-    ));
-    classificate.sort((a, b) => (b.totalPoints === a.totalPoints
-         && b.totalVictories === a.totalVictories ? b.goalsBalance - a.goalsBalance
-      : b.totalPoints - a.totalPoints
-    ));
-    classificate.sort((a, b) => (b.totalPoints === a.totalPoints
-        && b.totalVictories === a.totalVictories && b.goalsBalance === a.goalsBalance
-      ? b.goalsFavor - a.goalsFavor : b.totalPoints - a.totalPoints
-    ));
-    classificate.sort((a, b) => (b.totalPoints === a.totalPoints
-        && b.totalVictories === a.totalVictories && b.goalsBalance === a.goalsBalance
-        && b.goalsFavor === a.goalsFavor ? a.goalsOwn - b.goalsOwn : b.totalPoints - a.totalPoints
-    ));
+  public async filterTeams(path: string) :Promise<IClassification[]> {
+    const teamsInfo = await this.getAllInfo();
+    const allTeams = await this.allTeams();
+    teamsInfo.filter((team) => allTeams.forEach((all) => {
+      if (path === 'home') return team.name === all.homeTeam.teamName;
+      if (path === 'away') return team.name === all.awayTeam.teamName;
+      if (path === '') return team;
+    }));
+    return teamsInfo;
+  }
+
+  public async classification(path: string):Promise<IClassification[]> {
+    const classificate = await this.filterTeams(path);
+    classificate.sort((a, b) => b.totalPoints - a.totalPoints
+    || b.totalVictories - a.totalVictories || b.totalPoints - a.totalPoints
+    || b.goalsBalance - a.goalsBalance || b.goalsFavor - a.goalsFavor
+    || a.goalsOwn - b.goalsOwn);
     return classificate;
   }
 
