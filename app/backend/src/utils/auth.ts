@@ -10,7 +10,7 @@ const config: object = {
   algorithm: 'HS256',
 };
 
-const createToken = (data: ILogin | IUsers | undefined) => jwt.sign(
+export const createToken = (data: ILogin | IUsers | undefined) => jwt.sign(
   { data },
   secret,
   config as jwt.SignOptions,
@@ -18,4 +18,3 @@ const createToken = (data: ILogin | IUsers | undefined) => jwt.sign(
 
 export const veryfyToken = (token: string) => jwt.verify(token, secret) as jwt.JwtPayload;
 
-export default createToken;
