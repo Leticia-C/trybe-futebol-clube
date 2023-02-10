@@ -1,16 +1,38 @@
 export const login = {
-email: 'user@user.com',
-password: 'user_secret'
+    email: 'exemple-admin@gmail.com',
+    password: 'secretPassword2'
 }
 
+export const users = [{
+    email: 'exemple-user@gmail.com',
+    password: 'secretPassword1',
+},
+{
+    email: 'exemple-admin@gmail.com',
+    password: 'secretPassword2'
+},
+]
 
-export const user =  {
-    username: 'User',
-    role: 'user',
-    email: 'user@user.com',
-    password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO',
+export const email = {
+    email: 'exemple-admin@gmail.com',
 }
 
-export const token =  {
-    token: 'TokenForTest22user'
+export const password = {
+    password: 'secretPassword2'
+}
+
+export const incorrectEmail = { email: "emailExemple@gmail.com" }
+
+export const incorrectPassword = { password: "123456789" }
+
+export const admin = {
+    id: 1,
+    username: 'Admin',
+    role: 'admin',
+    email: 'exemple-admin@gmail.com',
+    password: 'secretPassword2'
+}
+
+export const token = {
+    token: { id: 1, role: "admin" }
 }

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ILogin } from '../interfaces/IUsers';
 import LoginService from '../service/loginService';
-import createToken, { veryfyToken } from '../utils/auth';
+import { createToken, veryfyToken } from '../utils/auth';
 
 export default class LoginController {
   public loginService: LoginService;

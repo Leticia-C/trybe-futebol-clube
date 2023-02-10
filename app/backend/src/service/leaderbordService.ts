@@ -27,13 +27,16 @@ export default class LeaderbordService {
   }
 
   public async filterTeams(path: string) :Promise<IClassification[]> {
+    let home: IClassification[] = [];
+    let away: IClassification[] = [];
     const teamsInfo = await this.getAllInfo();
     const allTeams = await this.allTeams();
-    teamsInfo.filter((team) => allTeams.forEach((all) => {
-      if (path === 'home') return team.name === all.homeTeam.teamName;
-      if (path === 'away') return team.name === all.awayTeam.teamName;
-      if (path === '') return team;
-    }));
+    allTeams.forEach((value) => {
+      home = teamsInfo.filter(({ name }) => name === value.homeTeam.teamName);
+      away = teamsInfo.filter(({ name }) => name === value.awayTeam.teamName);
+    });
+    if (path === 'home') return home;
+    if (path === 'away') return away;
     return teamsInfo;
   }
 
