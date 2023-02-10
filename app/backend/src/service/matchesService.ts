@@ -2,7 +2,7 @@ import IMatches, { IChangeGols } from '../interfaces/IMatches';
 import HttpException from '../utils/HttpException';
 import TeamsModel from '../database/models/TeamModel';
 import MatchesModel from '../database/models/MatchesModel';
-import { ITeams } from '../interfaces/IClassification';
+import { ITeamsMatches } from '../interfaces/IClassification';
 
 export default class MatcheService {
   constructor(
@@ -47,7 +47,7 @@ export default class MatcheService {
     );
   }
 
-  public async allTeams(): Promise<ITeams[] > {
+  public async allTeams(): Promise<ITeamsMatches[] > {
     const teams = await this.matchesModel.findAll({
       where: { inProgress: true },
       include: ([
@@ -59,7 +59,7 @@ export default class MatcheService {
           attributes: { exclude: ['id'] } },
       ]),
       attributes: { exclude: ['id', 'inProgress', 'awayTeamId', 'homeTeamId'] },
-    }) as unknown as ITeams[];
+    }) as unknown as ITeamsMatches[];
     return teams;
   }
 }

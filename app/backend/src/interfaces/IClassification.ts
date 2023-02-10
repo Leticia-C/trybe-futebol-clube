@@ -11,7 +11,7 @@ export default interface IClassification {
   efficiency: number,
 }
 
-export interface ITeams {
+export interface ITeamsMatches {
   homeTeamId: number,
   homeTeamGoals: number,
   awayTeamId: number,
@@ -35,7 +35,6 @@ export interface ITotalPointsAndResults {
 export interface IGolResults {
   goalsFavor: number,
   goalsOwn: number,
-  goalsBalance: number,
 }
 
 export interface ITotalsGamesAndPath {
