@@ -31,7 +31,7 @@
 
 
 
-## Instruções para instalar e rodar os testes de cada requisito
+## Instruções para instalar, rodar os testes de cada requisito e rodar a página da aplicação
 
 ```bash
 # Clone o repositório
@@ -50,7 +50,14 @@
   npm run test
 # Para rodar os testes criados:
   cd ./app/backend/ && npm run test:coverage
+# Para rodar a aplicação, volte para a pasta app:
+  cd ..
+# Entre na pasta de frontend:
+  cd ./frontend/ 
+# Rode a aplicação:
+   npm  start
 ```
+
 
 ## Detalhes
 <details>
